@@ -10,48 +10,42 @@ namespace AdventOfCode.Day1.Implementation
     {
         public int TotalToMatch { get; init; }
         public int NumberOfElementsToMatch { get; init; }
+        private bool _isMatchFound;
 
         public IEnumerable<long> Find(string report)
         {
+            _isMatchFound = false;
             var numbers = report.Split("\r\n").Select(n => Convert.ToInt64(n));
 
-            var numbersFound = new List<long>();
+            var numbersFound = new long[NumberOfElementsToMatch];
 
             return GetMatchingNumbersFor(numbers, numbersFound, 1);
         }
 
-        public IList<long> GetMatchingNumbersFor(IEnumerable<long> numbers, IList<long> numbersFound, int level, int? baseIndex = null)
+        public IList<long> GetMatchingNumbersFor(IEnumerable<long> numbers, long[] numbersFound, int level, int? baseIndex = null)
         {
             for (int i = 0; i < numbers.Count(); i++)
             {
                 if (baseIndex != null && i == baseIndex) continue; 
 
-                numbersFound.Add(numbers.ElementAt(i));
+                numbersFound[level - 1] = numbers.ElementAt(i);
 
                 if (level < NumberOfElementsToMatch)
                 {
                     GetMatchingNumbersFor(numbers, numbersFound, level + 1, i);
                 }
 
-                if (level == NumberOfElementsToMatch)
+                if (level == NumberOfElementsToMatch && numbersFound.Aggregate((a, n) => a + n) == TotalToMatch)
                 {
-                    if (numbersFound.Aggregate((a, n) => a + n) == TotalToMatch && numbersFound.Count == NumberOfElementsToMatch)
-                    {
-                        return numbersFound;
-                    }
-                    
-
-                    numbersFound.RemoveAt(numbersFound.Count - 1);
+                    _isMatchFound = true;
                 }
 
-                if (level < numbersFound.Count) // found them!
+                if (_isMatchFound)
                 {
-                    Console.WriteLine("Found them!");
                     return numbersFound;
                 }
             }
 
-            numbersFound.RemoveAt(numbersFound.Count - 1);
             return numbersFound;
         }
     }
