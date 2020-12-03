@@ -15,7 +15,7 @@ namespace AdventOfCode.Day1.Implementation
         public IEnumerable<long> Find(string report)
         {
             _isMatchFound = false;
-            var numbers = report.Split("\r\n").Select(n => Convert.ToInt64(n));
+            var numbers = report.Split("\r\n").Select(n => Convert.ToInt64(n)).ToList();
 
             var numbersFound = new long[NumberOfElementsToMatch];
 
