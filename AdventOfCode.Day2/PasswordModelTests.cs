@@ -25,5 +25,39 @@ namespace AdventOfCode.Day2
 
             Assert.False(password.IsValid());
         }
+
+        [Fact]
+        public void IsValid_GoodPasswordPart2_IsTrue()
+        {
+            var password = new PasswordConverter().Convert("1-3 a: abcde");
+
+            Assert.True(password.IsValidPart2());
+        }
+
+        [Fact]
+        public void IsValid_GoodPasswordWithLastRequiredCharacterPart2_IsTrue()
+        {
+            var password = new PasswordConverter().Convert("1-3 a: cbade");
+
+            Assert.True(password.IsValidPart2());
+        }
+
+
+        [Fact]
+        public void IsValid_WrongPasswordBothPlacesPart2_IsFalse()
+        {
+            var password = new PasswordConverter().Convert("1-3 b: cdefg");
+
+            Assert.False(password.IsValidPart2());
+        }
+
+        [Fact]
+        public void IsValid_WrongPasswordLastPlaceSameCharacterPart2_IsFalse()
+        {
+            var password = new PasswordConverter().Convert("2-9 c: ccccccccc");
+
+            Assert.False(password.IsValidPart2());
+        }
+
     }
 }

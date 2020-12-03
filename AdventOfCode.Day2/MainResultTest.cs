@@ -17,5 +17,14 @@ namespace AdventOfCode.Day2
 
             Assert.Equal(0, passwords.Count(p => p.IsValid()));
         }
+
+        [Fact]
+        public void ConvertMultiple_AllPasswordsPart2_ReturnsValidPasswords()
+        {
+            var passwords = new PasswordConverter().ConvertMultiple(Data.PasswordInput);
+
+            Assert.Equal(0, passwords.Count(p => p.IsValidPart2()));
+        }
+
     }
 }

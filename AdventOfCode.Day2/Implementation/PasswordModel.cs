@@ -20,5 +20,21 @@ namespace AdventOfCode.Day2.Implementation
 
             return requiredCharacterOccurrence >= CharacterMinOccurrence && requiredCharacterOccurrence <= CharacterMaxOccurrence;
         }
+
+        internal bool IsValidPart2()
+        {
+            if (string.IsNullOrEmpty(Password)) throw new NullReferenceException(nameof(Password));
+
+            var minIndex = CharacterMinOccurrence - 1;
+            var maxIndex = CharacterMaxOccurrence - 1;
+
+            var requiredIndices = new List<char>
+            {
+                Password[minIndex],
+                Password[maxIndex]
+            };
+
+            return requiredIndices.Where(p => p == CharacterRequired).Count() == 1;
+        }
     }
 }
