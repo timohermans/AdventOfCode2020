@@ -16,7 +16,7 @@ namespace AdventOfCode.Day2.Implementation
         {
             if (string.IsNullOrEmpty(Password)) return false;
 
-            var requiredCharacterOccurrence = Password.ToCharArray().Where(s => s == CharacterRequired).Count();
+            var requiredCharacterOccurrence = Password.Count(s => s == CharacterRequired);
 
             return requiredCharacterOccurrence >= CharacterMinOccurrence && requiredCharacterOccurrence <= CharacterMaxOccurrence;
         }
@@ -34,7 +34,7 @@ namespace AdventOfCode.Day2.Implementation
                 Password[maxIndex]
             };
 
-            return requiredIndices.Where(p => p == CharacterRequired).Count() == 1;
+            return requiredIndices.Count(p => p == CharacterRequired) == 1;
         }
     }
 }
