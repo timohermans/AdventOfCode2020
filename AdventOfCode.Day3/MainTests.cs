@@ -31,7 +31,7 @@ namespace AdventOfCode.Day3
             var trees4 = area.TraverseAndMeetTrees(new Player(7, 1));
             var trees5 = area.TraverseAndMeetTrees(new Player(1, 2));
 
-            Assert.Equal(0, trees1 * trees2 * trees3 * trees4 * trees5);
+            Assert.Equal(2265549792L, trees1 * trees2 * trees3 * trees4 * trees5);
         }
 
     }
