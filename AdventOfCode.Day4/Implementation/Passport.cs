@@ -35,24 +35,26 @@ namespace AdventOfCode.Day4.Implementation
         {
             var m = Regex.Match(pid, "^[0-9]{9}$");
 
-            if (!m.Success)
+            if (m.Success)
             {
-                throw new ArgumentNullException("pid invalid");
+                Pid = pid;
+                return;
             }
 
-            Pid = pid;
+            throw new ArgumentNullException("pid invalid");
         }
 
         private void SetEyeColor(string ecl)
         {
             var validColors = new List<string> { "amb", "blu", "brn", "gry", "grn", "hzl", "oth" };
 
-            if (!validColors.Contains(ecl))
+            if (validColors.Contains(ecl))
             {
-                throw new ArgumentNullException("Invalid eye color");
+                Ecl = ecl;
+                return;
             }
 
-            Ecl = ecl;
+            throw new ArgumentNullException("Invalid eye color");
         }
 
         private void SetHairColor(string hclString)
@@ -61,19 +63,18 @@ namespace AdventOfCode.Day4.Implementation
 
             Match m = Regex.Match(hclString, pattern);
 
-            if (!m.Success)
+            if (m.Success)
             {
-                throw new ArgumentNullException("hcl doesn't match");
+                Hcl = hclString;
+                return;
             }
 
-            Hcl = hclString;
+            throw new ArgumentNullException("hcl doesn't match");
         }
 
         private void SetHeight(string heightString)
         {
-            try
-            {
-                var heightNumber = Convert.ToInt32(heightString.Substring(heightString.Length - 2));
+                var heightNumber = Convert.ToInt32(heightString.Replace("cm", "").Replace("in", ""));
                 var heightMetric = heightString.Substring(heightString.Length - 2, 2);
 
                 if (heightMetric == "cm" && heightNumber >= 150 && heightNumber <= 193)
@@ -89,10 +90,6 @@ namespace AdventOfCode.Day4.Implementation
                 }
 
                 throw new ArgumentNullException("invalid height");
-            }catch (Exception ex)
-            {
-                var x = "";
-            }
         }
 
         private int GetValidNumberRange(string key, Dictionary<string, string> parts, int min, int max)
