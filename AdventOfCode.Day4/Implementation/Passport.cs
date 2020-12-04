@@ -77,13 +77,13 @@ namespace AdventOfCode.Day4.Implementation
             int heightNumber = ExtractHeightNumberFrom(heightString);
             var heightMetric = heightString.Substring(heightString.Length - 2, 2);
 
-            if (heightMetric == "cm" && heightNumber >= 150 && heightNumber <= 193)
+            if (heightMetric == "cm" && heightNumber.IsBetweenRange(150, 193))
             {
                 Height = heightNumber;
                 return;
             }
 
-            if (heightMetric == "in" && heightNumber >= 59 && heightNumber <= 76)
+            if (heightMetric == "in" && heightNumber.IsBetweenRange(59, 76))
             {
                 Height = heightNumber;
                 return;
@@ -118,7 +118,7 @@ namespace AdventOfCode.Day4.Implementation
                 throw new ValidationException($"{key} year is not a number");
             }
 
-            if (year >= min && year <= max)
+            if (year.IsBetweenRange(min, max))
             {
                 return year;
             }
