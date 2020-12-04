@@ -41,7 +41,7 @@ namespace AdventOfCode.Day4.Implementation
                 return;
             }
 
-            throw new ArgumentNullException("pid invalid");
+            throw new ValidationException("pid invalid");
         }
 
         private void SetEyeColor(string ecl)
@@ -54,7 +54,7 @@ namespace AdventOfCode.Day4.Implementation
                 return;
             }
 
-            throw new ArgumentNullException("Invalid eye color");
+            throw new ValidationException("Invalid eye color");
         }
 
         private void SetHairColor(string hclString)
@@ -69,38 +69,53 @@ namespace AdventOfCode.Day4.Implementation
                 return;
             }
 
-            throw new ArgumentNullException("hcl doesn't match");
+            throw new ValidationException("hcl doesn't match");
         }
 
         private void SetHeight(string heightString)
         {
-                var heightNumber = Convert.ToInt32(heightString.Replace("cm", "").Replace("in", ""));
-                var heightMetric = heightString.Substring(heightString.Length - 2, 2);
+            int heightNumber = ExtractHeightNumberFrom(heightString);
+            var heightMetric = heightString.Substring(heightString.Length - 2, 2);
 
-                if (heightMetric == "cm" && heightNumber >= 150 && heightNumber <= 193)
-                {
-                    Hgt = heightNumber;
-                    return;
-                }
+            if (heightMetric == "cm" && heightNumber >= 150 && heightNumber <= 193)
+            {
+                Hgt = heightNumber;
+                return;
+            }
 
-                if (heightMetric == "in" && heightNumber >= 59 && heightNumber <= 76)
-                {
-                    Hgt = heightNumber;
-                    return;
-                }
+            if (heightMetric == "in" && heightNumber >= 59 && heightNumber <= 76)
+            {
+                Hgt = heightNumber;
+                return;
+            }
 
-                throw new ArgumentNullException("invalid height");
+            throw new ValidationException("invalid height");
+        }
+
+        private static int ExtractHeightNumberFrom(string heightString)
+        {
+            var supportedMetrics = new List<string> { "cm", "in" };
+            var heightNumberString = heightString;
+            supportedMetrics.ForEach(m => heightNumberString = heightNumberString.Replace(m, ""));
+
+            int heightNumber;
+            if(!int.TryParse(heightNumberString, out heightNumber))
+            {
+                throw new ValidationException("Height provided is not supported");
+            }
+
+            return heightNumber;
         }
 
         private int GetValidNumberRange(string key, Dictionary<string, string> parts, int min, int max)
         {
-            var yearString = parts.GetValueOrDefault(key) ?? throw new ArgumentNullException(nameof(Byr));
+            var yearString = parts.GetValueOrDefault(key) ?? throw new ValidationException(nameof(Byr));
 
             int year;
 
             if (!int.TryParse(yearString, out year))
             {
-                throw new ArgumentNullException("no year");
+                throw new ValidationException("no year");
             }
 
             if (year >= min && year <= max)
@@ -108,7 +123,7 @@ namespace AdventOfCode.Day4.Implementation
                 return year;
             }
 
-            throw new ArgumentNullException("invalid year: " + key);
+            throw new ValidationException("invalid year: " + key);
         }
     }
 }
