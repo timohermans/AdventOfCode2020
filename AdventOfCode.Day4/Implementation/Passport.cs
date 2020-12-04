@@ -69,7 +69,7 @@ namespace AdventOfCode.Day4.Implementation
                 return;
             }
 
-            throw new ValidationException("hcl doesn't match");
+            throw new ValidationException("hcl has no valid color");
         }
 
         private void SetHeight(string heightString)
@@ -89,7 +89,7 @@ namespace AdventOfCode.Day4.Implementation
                 return;
             }
 
-            throw new ValidationException("invalid height");
+            throw new ValidationException("Height provided is not allowed");
         }
 
         private static int ExtractHeightNumberFrom(string heightString)
@@ -115,7 +115,7 @@ namespace AdventOfCode.Day4.Implementation
 
             if (!int.TryParse(yearString, out year))
             {
-                throw new ValidationException("no year");
+                throw new ValidationException($"{key} year is not a number");
             }
 
             if (year >= min && year <= max)
@@ -123,7 +123,7 @@ namespace AdventOfCode.Day4.Implementation
                 return year;
             }
 
-            throw new ValidationException("invalid year: " + key);
+            throw new ValidationException($"{key} year provided is not valid. Must be between {min} and {max}");
         }
     }
 }
