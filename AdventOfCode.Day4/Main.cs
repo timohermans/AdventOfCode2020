@@ -1,18 +1,20 @@
-﻿using AdventOfCode.Day4;
 using AdventOfCode.Day4.Implementation;
 using System;
+using Xunit;
 
-namespace AdventOfDay.Consoled
+namespace AdventOfCode.Day4
 {
-    class Program
+    public class Main
     {
-        static void Main(string[] args)
+        [Fact]
+        public void GetNumberOfValidPassport_Part1_AmountValid()
         {
             var passportString = Data.Passports;
             var validator = new PassportValidator();
 
             var nrOfValid = validator.GetNumberOfValidPassportsFrom(passportString);
-            Console.ReadLine();
+
+            Assert.Equal(264, nrOfValid);
         }
     }
 }

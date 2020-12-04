@@ -3,13 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30717.126
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdventOfCode.Day2", "AdventOfCode.Day2\AdventOfCode.Day2.csproj", "{7AF4EC42-6596-40A9-9DFF-79C7CD4BF82A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdventOfCode.Day2", "AdventOfCode.Day2\AdventOfCode.Day2.csproj", "{7AF4EC42-6596-40A9-9DFF-79C7CD4BF82A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdventOfCode.Day3", "AdventOfCode.Day3\AdventOfCode.Day3.csproj", "{92FBF326-7361-444A-841B-77CE145A8EDD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdventOfCode.Day3", "AdventOfCode.Day3\AdventOfCode.Day3.csproj", "{92FBF326-7361-444A-841B-77CE145A8EDD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdventOfCode.Day1", "AdventOfCode.Day1\AdventOfCode.Day1.csproj", "{8DD4F6D2-5E70-4997-B70C-5F28791CE880}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdventOfCode.Day1", "AdventOfCode.Day1\AdventOfCode.Day1.csproj", "{8DD4F6D2-5E70-4997-B70C-5F28791CE880}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdventOfDay.Console", "AdventOfDay.Console\AdventOfDay.Console.csproj", "{B32FB089-B4FB-4008-B0ED-7B59C82DBDB1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdventOfDay.Console", "AdventOfDay.Console\AdventOfDay.Console.csproj", "{B32FB089-B4FB-4008-B0ED-7B59C82DBDB1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdventOfCode.Day4", "AdventOfCode.Day4\AdventOfCode.Day4.csproj", "{F1A1C015-153E-41C8-8863-E4207BF8EB08}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{B32FB089-B4FB-4008-B0ED-7B59C82DBDB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B32FB089-B4FB-4008-B0ED-7B59C82DBDB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B32FB089-B4FB-4008-B0ED-7B59C82DBDB1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F1A1C015-153E-41C8-8863-E4207BF8EB08}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F1A1C015-153E-41C8-8863-E4207BF8EB08}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F1A1C015-153E-41C8-8863-E4207BF8EB08}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F1A1C015-153E-41C8-8863-E4207BF8EB08}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
