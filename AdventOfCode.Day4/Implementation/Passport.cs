@@ -8,14 +8,14 @@ namespace AdventOfCode.Day4.Implementation
 {
     public class Passport
     {
-        public string Ecl { get; set; }
-        public string Pid { get; set; }
-        public int Eyr { get; set; }
-        public string Hcl { get; set; }
-        public int Byr { get; set; }
-        public int Iyr { get; set; }
-        public int Hgt { get; set; }
-        public string Cid { get; set; }
+        public string Ecl { get; private set; }
+        public string Pid { get; private set; }
+        public int Eyr { get; private set; }
+        public string Hcl { get; private set; }
+        public int Byr { get; private set; }
+        public int Iyr { get; private set; }
+        public int Hgt { get; private set; }
+        public string Cid { get; private set; }
 
         public Passport(string input)
         {
