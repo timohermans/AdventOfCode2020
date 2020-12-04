@@ -23,10 +23,10 @@ namespace AdventOfCode.Day4.Implementation
 
             SetEyeColor(parts.GetValueOrDefault("ecl") ?? throw new ArgumentNullException(nameof(EyeColor)));
             SetPid(parts.GetValueOrDefault("pid") ?? throw new ArgumentNullException(nameof(PersonalId)));
-            ExpirationYear = GetValidNumberRange("eyr", parts, 2020, 2030);
+            ExpirationYear = ExtractValidYearFrom("eyr", parts, 2020, 2030);
             SetHairColor(parts.GetValueOrDefault("hcl") ?? throw new ArgumentNullException(nameof(HairColor)));
-            BirthYear = GetValidNumberRange("byr", parts, 1920, 2002);
-            IssuerYear = GetValidNumberRange("iyr", parts, 2010, 2020);
+            BirthYear = ExtractValidYearFrom("byr", parts, 1920, 2002);
+            IssuerYear = ExtractValidYearFrom("iyr", parts, 2010, 2020);
             SetHeight(parts.GetValueOrDefault("hgt") ?? throw new ArgumentNullException(nameof(Height)));
             CountryId = parts.GetValueOrDefault("cid");
         }
@@ -107,7 +107,7 @@ namespace AdventOfCode.Day4.Implementation
             return heightNumber;
         }
 
-        private int GetValidNumberRange(string key, Dictionary<string, string> parts, int min, int max)
+        private int ExtractValidYearFrom(string key, Dictionary<string, string> parts, int min, int max)
         {
             var yearString = parts.GetValueOrDefault(key) ?? throw new ValidationException(nameof(BirthYear));
 
