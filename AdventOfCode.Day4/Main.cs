@@ -14,7 +14,7 @@ namespace AdventOfCode.Day4
 
             var nrOfValid = validator.GetNumberOfValidPassportsFrom(passportString);
 
-            Assert.Equal(264, nrOfValid);
+            Assert.Equal(224, nrOfValid);
         }
     }
 }

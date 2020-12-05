@@ -8,51 +8,53 @@ namespace AdventOfCode.Day4.Implementation
 {
     public class Passport
     {
-        public string Ecl { get; set; }
-        public string Pid { get; set; }
-        public int Eyr { get; set; }
-        public string Hcl { get; set; }
-        public int Byr { get; set; }
-        public int Iyr { get; set; }
-        public int Hgt { get; set; }
-        public string Cid { get; set; }
+        public string EyeColor { get; private set; }
+        public string PersonalId { get; private set; }
+        public int ExpirationYear { get; private set; }
+        public string HairColor { get; private set; }
+        public int BirthYear { get; private set; }
+        public int IssuerYear { get; private set; }
+        public int Height { get; private set; }
+        public string CountryId { get; private set; }
 
         public Passport(string input)
         {
             var parts = string.Join(' ', input.Split("\r\n")).Split(' ').ToDictionary(s => s.Split(':')[0], s => s.Split(':')[1]);
 
-            SetEyeColor(parts.GetValueOrDefault("ecl") ?? throw new ArgumentNullException(nameof(Ecl)));
-            SetPid(parts.GetValueOrDefault("pid") ?? throw new ArgumentNullException(nameof(Pid)));
-            Eyr = GetValidNumberRange("eyr", parts, 2020, 2030);
-            SetHairColor(parts.GetValueOrDefault("hcl") ?? throw new ArgumentNullException(nameof(Hcl)));
-            Byr = GetValidNumberRange("byr", parts, 1920, 2002);
-            Iyr = GetValidNumberRange("iyr", parts, 2010, 2020);
-            SetHeight(parts.GetValueOrDefault("hgt") ?? throw new ArgumentNullException(nameof(Hgt)));
-            Cid = parts.GetValueOrDefault("cid");
+            SetEyeColor(parts.GetValueOrDefault("ecl") ?? throw new ArgumentNullException(nameof(EyeColor)));
+            SetPid(parts.GetValueOrDefault("pid") ?? throw new ArgumentNullException(nameof(PersonalId)));
+            ExpirationYear = ExtractValidYearFrom("eyr", parts, 2020, 2030);
+            SetHairColor(parts.GetValueOrDefault("hcl") ?? throw new ArgumentNullException(nameof(HairColor)));
+            BirthYear = ExtractValidYearFrom("byr", parts, 1920, 2002);
+            IssuerYear = ExtractValidYearFrom("iyr", parts, 2010, 2020);
+            SetHeight(parts.GetValueOrDefault("hgt") ?? throw new ArgumentNullException(nameof(Height)));
+            CountryId = parts.GetValueOrDefault("cid");
         }
 
         private void SetPid(string pid)
         {
             var m = Regex.Match(pid, "^[0-9]{9}$");
 
-            if (!m.Success)
+            if (m.Success)
             {
-                throw new ArgumentNullException("pid invalid");
+                PersonalId = pid;
+                return;
             }
 
-            Pid = pid;
+            throw new ValidationException("pid invalid");
         }
 
         private void SetEyeColor(string ecl)
         {
             var validColors = new List<string> { "amb", "blu", "brn", "gry", "grn", "hzl", "oth" };
 
-            if (!validColors.Contains(ecl))
+            if (validColors.Contains(ecl))
             {
-                throw new ArgumentNullException("Invalid eye color");
+                EyeColor = ecl;
+                return;
             }
 
-            Ecl = ecl;
+            throw new ValidationException("Invalid eye color");
         }
 
         private void SetHairColor(string hclString)
@@ -61,57 +63,67 @@ namespace AdventOfCode.Day4.Implementation
 
             Match m = Regex.Match(hclString, pattern);
 
-            if (!m.Success)
+            if (m.Success)
             {
-                throw new ArgumentNullException("hcl doesn't match");
+                HairColor = hclString;
+                return;
             }
 
-            Hcl = hclString;
+            throw new ValidationException("hcl has no valid color");
         }
 
         private void SetHeight(string heightString)
         {
-            try
+            int heightNumber = ExtractHeightNumberFrom(heightString);
+            var heightMetric = heightString.Substring(heightString.Length - 2, 2);
+
+            if (heightMetric == "cm" && heightNumber.IsBetweenRange(150, 193))
             {
-                var heightNumber = Convert.ToInt32(heightString.Substring(heightString.Length - 2));
-                var heightMetric = heightString.Substring(heightString.Length - 2, 2);
-
-                if (heightMetric == "cm" && heightNumber >= 150 && heightNumber <= 193)
-                {
-                    Hgt = heightNumber;
-                    return;
-                }
-
-                if (heightMetric == "in" && heightNumber >= 59 && heightNumber <= 76)
-                {
-                    Hgt = heightNumber;
-                    return;
-                }
-
-                throw new ArgumentNullException("invalid height");
-            }catch (Exception ex)
-            {
-                var x = "";
+                Height = heightNumber;
+                return;
             }
+
+            if (heightMetric == "in" && heightNumber.IsBetweenRange(59, 76))
+            {
+                Height = heightNumber;
+                return;
+            }
+
+            throw new ValidationException("Height provided is not allowed");
         }
 
-        private int GetValidNumberRange(string key, Dictionary<string, string> parts, int min, int max)
+        private static int ExtractHeightNumberFrom(string heightString)
         {
-            var yearString = parts.GetValueOrDefault(key) ?? throw new ArgumentNullException(nameof(Byr));
+            var supportedMetrics = new List<string> { "cm", "in" };
+            var heightNumberString = heightString;
+            supportedMetrics.ForEach(m => heightNumberString = heightNumberString.Replace(m, ""));
+
+            int heightNumber;
+            if(!int.TryParse(heightNumberString, out heightNumber))
+            {
+                throw new ValidationException("Height provided is not supported");
+            }
+
+            return heightNumber;
+        }
+
+        private int ExtractValidYearFrom(string key, Dictionary<string, string> parts, int min, int max)
+        {
+            var yearString = parts.GetValueOrDefault(key) ?? throw new ValidationException(nameof(BirthYear));
 
             int year;
 
             if (!int.TryParse(yearString, out year))
             {
-                throw new ArgumentNullException("no year");
+                throw new ValidationException($"{key} year is not a number");
             }
 
-            if (year >= min && year <= max)
+            if (year.IsBetweenRange(min, max))
             {
                 return year;
             }
 
-            throw new ArgumentNullException("invalid year: " + key);
+            throw new ValidationException($"{key} year provided is not valid. Must be between {min} and {max}");
         }
     }
 }

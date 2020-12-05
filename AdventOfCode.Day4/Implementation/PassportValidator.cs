@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 
 namespace AdventOfCode.Day4.Implementation
@@ -22,6 +23,10 @@ namespace AdventOfCode.Day4.Implementation
                 catch (ArgumentNullException ex)
                 {
                     Console.WriteLine($"Invalid passport: \r\n {passportString} \r\n Missing property: \r\n {ex.ParamName}");
+                }
+                catch (ValidationException ex)
+                {
+                    Console.WriteLine($"Passport has and invalid value: \r\n {ex.Message}");
                 }
             }
 
