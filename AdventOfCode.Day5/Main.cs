@@ -51,7 +51,7 @@ namespace AdventOfCode.Day5
             }
 
 
-            Assert.Equal(0, seatId);
+            Assert.Equal(607, seatId);
         }
     }
 }
