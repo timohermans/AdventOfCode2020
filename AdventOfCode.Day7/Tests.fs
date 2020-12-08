@@ -30,77 +30,81 @@ let extractBag bagInput =
           contents = extractRequirements bagInput }
     | _ -> failwith "Incorrect input"
 
-let bagMatches = System.Collections.Generic.Dictionary<string, bool>()
+let bagMatches =
+    System.Collections.Generic.Dictionary<string, bool>()
 
 let rec canContainBag search allBags (foundBags: Bag list) (bag: Bag) =
-        if bag.name = search then true
-        else if bagMatches.ContainsKey(bag.name) then // caching
-            bagMatches.[bag.name]
-        else
-            let notYetSearchedBags =             
-                bag.contents
-                |> Seq.map (fun br -> br.name)
+    if bag.name = search then
+        true
+    else
 
-            let bagsToSearch = 
-                allBags
-                |> Seq.filter (fun b -> Seq.exists (fun br -> br = b.name) notYetSearchedBags)
-                |> List.ofSeq
+    if bagMatches.ContainsKey(bag.name) then // caching
+        bagMatches.[bag.name]
+    else
+        let notYetSearchedBags =
+            bag.contents |> Seq.map (fun br -> br.name)
 
-            let isFound = 
-                 bagsToSearch
-                 |> Seq.exists (fun b -> canContainBag search allBags (foundBags @ [b]) b)
-                       
-            if foundBags.Length = 0 then
-                bagMatches.TryAdd(bag.name, isFound) |> ignore
+        let bagsToSearch =
+            allBags
+            |> Seq.filter (fun b -> Seq.exists (fun br -> br = b.name) notYetSearchedBags)
+            |> List.ofSeq
 
-            isFound
+        let isFound =
+            bagsToSearch
+            |> Seq.exists (fun b -> canContainBag search allBags (foundBags @ [ b ]) b)
+
+        if foundBags.Length = 0
+        then bagMatches.TryAdd(bag.name, isFound) |> ignore
+
+        isFound
 
 [<Fact>]
 let ``Part 1`` () =
     let bagInput = Data.input
     let search = "shiny gold"
 
-    let bags = 
+    let bags =
         bagInput.Split("\r\n")
         |> Seq.map (fun s -> extractBag s)
         |> Seq.cache
 
-    let nrOfGoldBagHolders = 
+    let nrOfGoldBagHolders =
         bags
         |> Seq.filter (fun b -> b.name <> search)
         |> Seq.filter (canContainBag search bags [])
         |> Seq.length
 
-    Assert.Equal (337, nrOfGoldBagHolders)
+    Assert.Equal(337, nrOfGoldBagHolders)
 
 let rec countBags (allBags: Bag list) (bag: Bag) =
     bag.contents
     |> function
-       | [] -> 1
-       | bags -> 
-            let nr = 
-                bags
-                |> Seq.map (fun br -> 
-                    (seq { 1 .. br.amount }  
-                    |> Seq.map (fun _ -> (Seq.find (fun a -> a.name = br.name) allBags))
-                    |> Seq.map (countBags allBags)
-                    |> Seq.sum))
-                |> Seq.sum
-            nr + 1
+    | [] -> 1
+    | bags ->
+        let nr =
+            bags
+            |> Seq.map (fun br ->
+                (seq { 1 .. br.amount }
+                 |> Seq.map (fun _ -> (Seq.find (fun a -> a.name = br.name) allBags))
+                 |> Seq.map (countBags allBags)
+                 |> Seq.sum))
+            |> Seq.sum
+
+        nr + 1
 
 [<Fact>]
 let ``Part 2`` () =
     let bagInput = Data.input
     let search = "shiny gold"
 
-    let bags = 
+    let bags =
         bagInput.Split("\r\n")
         |> Seq.map (fun s -> extractBag s)
         |> List.ofSeq
 
-    let nrOfBags = 
+    let nrOfBags =
         bags
         |> Seq.find (fun b -> b.name = search)
         |> fun bag -> (countBags bags bag)
 
-    Assert.Equal (50100, nrOfBags - 1)
+    Assert.Equal(50100, nrOfBags - 1)
