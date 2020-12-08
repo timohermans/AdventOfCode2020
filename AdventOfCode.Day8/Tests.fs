@@ -128,11 +128,11 @@ let rec executePart2 (statements: StatementInfo list) (result: ExecutionResult2)
 
     if isDone then
         if not isAtFinalInstruction then
-            let newStatements =
+            let resetStatements =
                 List.map (fun s -> ({ s with order = 0 }: StatementInfo)) statements
 
             executePart2
-                newStatements
+                resetStatements
                 { result with
                       Accumulator = 0
                       FailedIndices = result.FailedIndices @ [ result.SwitchedIndex ]
