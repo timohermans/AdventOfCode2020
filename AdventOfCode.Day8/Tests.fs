@@ -6,7 +6,7 @@ open Xunit
 type StatementInfo =
     { statement: string
       argument: int
-      order: int }
+      executedOnTurn: int }
 
 type ExecutionResult =
     { accumulator: int
@@ -21,13 +21,13 @@ let parseExecutions (inputStrings: string) =
         |> fun splits ->
             { statement = splits.[0] |> string
               argument = splits.[1] |> int
-              order = 0 })
+              executedOnTurn = 0 })
     |> Seq.cache
     |> List.ofSeq
 
 let rec execute (statements: StatementInfo list) (result: ExecutionResult) =
     let info = statements.[result.index]
-    let isDone = info.order <> 0
+    let isDone = info.executedOnTurn <> 0
 
     if isDone then
         let summary =
@@ -38,7 +38,7 @@ let rec execute (statements: StatementInfo list) (result: ExecutionResult) =
     else
         let newStatements =
             statements
-            |> Seq.mapi (fun i v -> if i = result.index then { v with order = result.order + 1 } else v)
+            |> Seq.mapi (fun i v -> if i = result.index then { v with executedOnTurn = result.order + 1 } else v)
             |> List.ofSeq
 
         execute
@@ -79,7 +79,7 @@ let ``Part 1`` () =
 
 let updateStatements (statements: StatementInfo list) order index =
     statements
-    |> Seq.mapi (fun i v -> if i = index then { v with order = order + 1 } else v)
+    |> Seq.mapi (fun i v -> if i = index then { v with executedOnTurn = order + 1 } else v)
     |> List.ofSeq
 
 
@@ -118,18 +118,18 @@ let getNopInstructions result shouldSwitch statements =
 
 
 let rec executePart2 (statements: StatementInfo list) (result: ExecutionResult2) =
-    let info =
+    let currentStatement =
         if result.Index < statements.Length then statements.[result.Index] else statements.[statements.Length - 1]
 
-    let isDone = info.order <> 0
+    let isDone = currentStatement.executedOnTurn <> 0
 
     let isAtFinalInstruction =
-        statements.[statements.Length - 1].order <> 0
+        statements.[statements.Length - 1].executedOnTurn <> 0
 
     if isDone then
         if not isAtFinalInstruction then
             let resetStatements =
-                List.map (fun s -> ({ s with order = 0 }: StatementInfo)) statements
+                List.map (fun s -> ({ s with executedOnTurn = 0 }: StatementInfo)) statements
 
             executePart2
                 resetStatements
@@ -151,7 +151,7 @@ let rec executePart2 (statements: StatementInfo list) (result: ExecutionResult2)
 
         executePart2
             newStatements
-            (match info with
+            (match currentStatement with
              | info when info.statement = "nop"
                          && not <| Seq.contains result.Index result.FailedIndices
                          && result.SwitchedIndex = -1 -> getJumpInstructions info result true
