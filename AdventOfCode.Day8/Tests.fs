@@ -153,12 +153,10 @@ let rec executePart2 (statements: StatementInfo list) (result: ExecutionResult2)
             newStatements
             (match info with
              | info when info.statement = "nop"
-                         && not
-                            <| Seq.contains result.Index result.FailedIndices
+                         && not <| Seq.contains result.Index result.FailedIndices
                          && result.SwitchedIndex = -1 -> getJumpInstructions info result true
              | info when info.statement = "jmp"
-                         && not
-                            <| Seq.contains result.Index result.FailedIndices
+                         && not <| Seq.contains result.Index result.FailedIndices
                          && result.SwitchedIndex = -1 -> getNopInstructions result true newStatements
              | info when info.statement = "acc" ->
                  { result with
