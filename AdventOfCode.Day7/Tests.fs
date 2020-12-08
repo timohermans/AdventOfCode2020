@@ -13,11 +13,12 @@ type Bag =
 
 let extractRequirements input =
     Regex.Matches(input, "(\d) ([\w|\s]+) bag[s]?")
-    |> List.ofSeq
-    |> List.map (fun g -> List.ofSeq g.Groups.Values)
-    |> List.map (fun l ->
+    |> Seq.map (fun g -> List.ofSeq g.Groups.Values)
+    |> Seq.map (fun l ->
         { name = l.[2].Value |> string
           amount = l.[1].Value |> int })
+    |> Seq.cache
+    |> List.ofSeq
 
 let extractBag bagInput =
     Regex.Match(bagInput, "(\D+) bags contain ([\w|\s]+)").Groups.Values
@@ -62,6 +63,7 @@ let ``Part 1`` () =
     let bags = 
         bagInput.Split("\r\n")
         |> Seq.map (fun s -> extractBag s)
+        |> Seq.cache
 
     let nrOfGoldBagHolders = 
         bags
